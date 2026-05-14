@@ -6,10 +6,10 @@ export async function SiteHeader() {
   const session = await getSession();
 
   return (
-    <header className="border-b border-[var(--line)] bg-[var(--paper)]/80 backdrop-blur-sm sticky top-0 z-20">
-      <div className="mx-auto flex max-w-4xl flex-wrap items-baseline justify-between gap-x-6 gap-y-3 px-5 py-6 sm:px-10">
+    <header className="sticky top-0 z-20 border-b border-[var(--line)] bg-[var(--paper)]/95 backdrop-blur-sm supports-[backdrop-filter]:bg-[var(--paper)]/80">
+      <div className="mx-auto flex max-w-4xl flex-col gap-4 px-4 py-4 sm:flex-row sm:flex-wrap sm:items-baseline sm:justify-between sm:gap-x-6 sm:gap-y-3 sm:px-10 sm:py-5">
         <Link href="/" className="group block">
-          <span className="font-serif text-2xl tracking-tight text-[var(--ink)] group-hover:text-[var(--ink-soft)] transition-colors duration-300">
+          <span className="font-serif text-2xl tracking-tight text-[var(--orange)] group-hover:text-[#c96a24] transition-colors duration-300">
             {site.name}
           </span>
           <span className="mt-1 block font-sans text-[11px] uppercase tracking-[0.28em] text-[var(--ink-muted)]">

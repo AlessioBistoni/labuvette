@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
+import { redirectToPath } from "@/lib/redirect-response";
 import {
   SESSION_COOKIE,
   createSessionToken,
@@ -19,14 +20,14 @@ export async function POST(request: Request) {
   }
 
   if (!process.env.DATABASE_URL) {
-    return NextResponse.redirect(new URL("/login?error=config", request.url), 303);
+    return redirectToPath(request, "/login?error=config");
   }
 
   let form: FormData;
   try {
     form = await request.formData();
   } catch {
-    return NextResponse.redirect(new URL("/login?error=1", request.url), 303);
+    return redirectToPath(request, "/login?error=1");
   }
 
   const username = String(form.get("username") ?? "").trim().toLowerCase();
@@ -36,23 +37,23 @@ export async function POST(request: Request) {
     typeof fromRaw === "string" ? safeInternalPath(fromRaw) : "/";
 
   if (!username || !password) {
-    return NextResponse.redirect(new URL("/login?error=1", request.url), 303);
+    return redirectToPath(request, "/login?error=1");
   }
 
   let admin;
   try {
     admin = await prisma.admin.findUnique({ where: { username } });
   } catch {
-    return NextResponse.redirect(new URL("/login?error=config", request.url), 303);
+    return redirectToPath(request, "/login?error=config");
   }
 
   if (!admin) {
-    return NextResponse.redirect(new URL("/login?error=1", request.url), 303);
+    return redirectToPath(request, "/login?error=1");
   }
 
   const passwordOk = await bcrypt.compare(password, admin.passwordHash);
   if (!passwordOk) {
-    return NextResponse.redirect(new URL("/login?error=1", request.url), 303);
+    return redirectToPath(request, "/login?error=1");
   }
 
   const session: SessionPayload = {
@@ -64,10 +65,10 @@ export async function POST(request: Request) {
 
   const token = await createSessionToken(session);
   if (!token) {
-    return NextResponse.redirect(new URL("/login?error=config", request.url), 303);
+    return redirectToPath(request, "/login?error=config");
   }
 
-  const res = NextResponse.redirect(new URL(from, request.url), 303);
+  const res = redirectToPath(request, from);
   res.cookies.set(SESSION_COOKIE, token, getSessionCookieOptions());
   return res;
 }

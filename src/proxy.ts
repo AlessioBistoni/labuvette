@@ -1,20 +1,16 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { redirectToPath } from "@/lib/redirect-response";
 import { SESSION_COOKIE, verifySessionToken } from "@/lib/session";
 
 function redirectToLogin(request: NextRequest, pathname: string) {
-  const login = new URL("/login", request.url);
-  login.searchParams.set(
-    "from",
-    `${pathname}${request.nextUrl.search}`,
-  );
-  return NextResponse.redirect(login);
+  const from = `${pathname}${request.nextUrl.search}`;
+  const qs = new URLSearchParams({ from });
+  return redirectToPath(request, `/login?${qs.toString()}`);
 }
 
 function redirectForbidden(request: NextRequest) {
-  const home = new URL("/", request.url);
-  home.searchParams.set("forbidden", "1");
-  return NextResponse.redirect(home);
+  return redirectToPath(request, "/?forbidden=1");
 }
 
 export async function proxy(request: NextRequest) {

@@ -1,3 +1,4 @@
+import type { Viewport } from "next";
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Jost, Geist_Mono, Playfair_Display } from "next/font/google";
 import "./globals.css";
@@ -37,6 +38,12 @@ export const metadata: Metadata = {
   description: site.description,
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -45,9 +52,9 @@ export default function RootLayout({
   return (
     <html
       lang="it"
-      className={`${serif.variable} ${sans.variable} ${geistMono.variable} ${playfair.variable} h-full antialiased`}
+      className={`${serif.variable} ${sans.variable} ${geistMono.variable} ${playfair.variable} min-h-dvh antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="flex min-h-dvh flex-col overflow-x-hidden">{children}</body>
     </html>
   );
 }

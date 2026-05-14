@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 import { PageIntro } from "@/components/page-intro";
 import { BlogFeed } from "@/components/blog-feed";
 import { site } from "@/config/site";
@@ -16,7 +15,7 @@ export default async function Home({ searchParams }: Props) {
   const forbidden = sp.forbidden === "1";
 
   return (
-    <main className="mx-auto max-w-4xl px-5 pb-20 pt-10 sm:px-10 sm:pt-14">
+    <main className="mx-auto w-full max-w-4xl flex-1 px-4 pb-16 pt-8 sm:px-10 sm:pb-20 sm:pt-14">
       {forbidden ? (
         <p
           className="mb-10 rounded border border-[var(--wine)]/30 bg-[var(--cream-dark)] px-4 py-3 font-sans text-sm text-[var(--wine)]"
@@ -35,9 +34,11 @@ export default async function Home({ searchParams }: Props) {
           .
         </p>
       ) : (
-        <Suspense fallback={null}>
-          <BlogFeed posts={posts} locale={site.locale} />
-        </Suspense>
+        <BlogFeed
+          posts={posts}
+          locale={site.locale}
+          postSlug={sp.post ?? null}
+        />
       )}
     </main>
   );

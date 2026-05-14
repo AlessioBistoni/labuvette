@@ -8,6 +8,7 @@
   --ink-muted: #6b6b6b;
   --ink-faint: #949494;
   --wine: #1a1a1a;
+  --orange: #e07a2f;
   --line: #d4cfc4;
   --accent: #1a1a1a;
 }
@@ -22,6 +23,7 @@ body {
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-sans-ui), system-ui, sans-serif;
+  -webkit-overflow-scrolling: touch;
 }
 
 ::selection {
