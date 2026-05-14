@@ -29,19 +29,19 @@ export async function POST(request: Request) {
     return NextResponse.redirect(new URL("/login?error=1", request.url), 303);
   }
 
-  const email = String(form.get("email") ?? "").trim().toLowerCase();
+  const username = String(form.get("username") ?? "").trim().toLowerCase();
   const password = String(form.get("password") ?? "");
   const fromRaw = form.get("from");
   const from =
     typeof fromRaw === "string" ? safeInternalPath(fromRaw) : "/";
 
-  if (!email || !password) {
+  if (!username || !password) {
     return NextResponse.redirect(new URL("/login?error=1", request.url), 303);
   }
 
   let admin;
   try {
-    admin = await prisma.admin.findUnique({ where: { email } });
+    admin = await prisma.admin.findUnique({ where: { username } });
   } catch {
     return NextResponse.redirect(new URL("/login?error=config", request.url), 303);
   }
@@ -57,7 +57,7 @@ export async function POST(request: Request) {
 
   const session: SessionPayload = {
     sub: admin.id,
-    email: admin.email,
+    username: admin.username,
     name: admin.name,
     role: admin.role === "OWNER" ? "OWNER" : "ADMIN",
   };

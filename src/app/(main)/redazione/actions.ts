@@ -4,11 +4,22 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/get-session";
 import {
-  deletePostFile,
+  createPost,
+  deletePostBySlug,
+  getPostBySlug,
   postExists,
-  sanitizeSlug,
-  writePostMarkdown,
-} from "@/lib/post-file";
+  updatePost,
+} from "@/lib/posts";
+import { sanitizeSlug } from "@/lib/slug";
+import {
+  htmlPlainTextLength,
+  sanitizeArticleHtml,
+} from "@/lib/sanitize-html";
+import {
+  deleteUploadFile,
+  isManagedUpload,
+  saveCoverUpload,
+} from "@/lib/uploads";
 
 async function requireEditor() {
   const s = await getSession();
@@ -25,6 +36,32 @@ function parseIsoDate(raw: string, errRedirect: string) {
   return d;
 }
 
+async function resolveCoverFromForm(
+  formData: FormData,
+  slug: string,
+  existingCover?: string | null,
+): Promise<string | undefined> {
+  const coverFile = formData.get("coverFile");
+  const coverUrl = String(formData.get("coverUrl") ?? "").trim();
+
+  if (coverFile instanceof File && coverFile.size > 0) {
+    if (isManagedUpload(existingCover)) deleteUploadFile(existingCover!);
+    try {
+      return await saveCoverUpload(coverFile, slug);
+    } catch {
+      redirect(`/redazione/${slug}?err=cover`);
+    }
+  }
+
+  if (coverUrl) {
+    if (coverUrl.startsWith("/") || coverUrl.startsWith("https://")) {
+      return coverUrl;
+    }
+  }
+
+  return existingCover ?? undefined;
+}
+
 export async function createPostAction(formData: FormData) {
   await requireEditor();
 
@@ -32,7 +69,7 @@ export async function createPostAction(formData: FormData) {
   if (!slug) {
     redirect("/redazione/nuovo?err=slug");
   }
-  if (postExists(slug)) {
+  if (await postExists(slug)) {
     redirect("/redazione/nuovo?err=exists");
   }
 
@@ -42,23 +79,37 @@ export async function createPostAction(formData: FormData) {
   const date = parseIsoDate(String(formData.get("date") ?? ""), "/redazione/nuovo");
   const author = String(formData.get("author") ?? "").trim();
   const excerpt = String(formData.get("excerpt") ?? "").trim();
-  const cover = String(formData.get("cover") ?? "").trim();
-  const body = String(formData.get("body") ?? "");
+  const bodyRaw = String(formData.get("body") ?? "");
+  const body = sanitizeArticleHtml(bodyRaw);
 
-  if (body.trim().length < 3) {
+  if (htmlPlainTextLength(body) < 3) {
     redirect("/redazione/nuovo?err=body");
   }
 
-  writePostMarkdown(slug, body, {
+  let cover: string | undefined;
+  const coverFile = formData.get("coverFile");
+  const coverUrl = String(formData.get("coverUrl") ?? "").trim();
+  if (coverFile instanceof File && coverFile.size > 0) {
+    try {
+      cover = await saveCoverUpload(coverFile, slug);
+    } catch {
+      redirect("/redazione/nuovo?err=cover");
+    }
+  } else if (coverUrl && (coverUrl.startsWith("/") || coverUrl.startsWith("https://"))) {
+    cover = coverUrl;
+  }
+
+  await createPost({
+    slug,
     title,
     date,
     author: author || undefined,
     excerpt: excerpt || undefined,
-    cover: cover || undefined,
+    cover,
+    content: body,
   });
 
   revalidatePath("/");
-  revalidatePath(`/post/${slug}`);
   redirect(`/redazione/${slug}?saved=1`);
 }
 
@@ -66,9 +117,12 @@ export async function updatePostAction(formData: FormData) {
   await requireEditor();
 
   const slug = sanitizeSlug(String(formData.get("originalSlug") ?? ""));
-  if (!slug || !postExists(slug)) {
+  if (!slug || !(await postExists(slug))) {
     redirect("/redazione?err=missing");
   }
+
+  const existing = await getPostBySlug(slug);
+  const previousCover = existing?.cover ?? null;
 
   const title = String(formData.get("title") ?? "").trim();
   if (title.length < 1) {
@@ -81,23 +135,25 @@ export async function updatePostAction(formData: FormData) {
   );
   const author = String(formData.get("author") ?? "").trim();
   const excerpt = String(formData.get("excerpt") ?? "").trim();
-  const cover = String(formData.get("cover") ?? "").trim();
-  const body = String(formData.get("body") ?? "");
+  const bodyRaw = String(formData.get("body") ?? "");
+  const body = sanitizeArticleHtml(bodyRaw);
 
-  if (body.trim().length < 3) {
+  if (htmlPlainTextLength(body) < 3) {
     redirect(`/redazione/${slug}?err=body`);
   }
 
-  writePostMarkdown(slug, body, {
+  const cover = await resolveCoverFromForm(formData, slug, previousCover);
+
+  await updatePost(slug, {
     title,
     date,
     author: author || undefined,
     excerpt: excerpt || undefined,
-    cover: cover || undefined,
+    cover,
+    content: body,
   });
 
   revalidatePath("/");
-  revalidatePath(`/post/${slug}`);
   redirect(`/redazione/${slug}?saved=1`);
 }
 
@@ -105,12 +161,19 @@ export async function deletePostAction(formData: FormData) {
   await requireEditor();
 
   const slug = sanitizeSlug(String(formData.get("slug") ?? ""));
-  if (!slug || !postExists(slug)) {
+  if (!slug) {
     redirect("/redazione?err=missing");
   }
 
-  deletePostFile(slug);
+  const removed = await deletePostBySlug(slug);
+  if (!removed) {
+    redirect("/redazione?err=missing");
+  }
+
+  if (isManagedUpload(removed.cover)) {
+    deleteUploadFile(removed.cover!);
+  }
+
   revalidatePath("/");
-  revalidatePath(`/post/${slug}`);
   redirect("/redazione?deleted=1");
 }

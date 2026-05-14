@@ -11,7 +11,7 @@ type Props = {
 };
 
 export default async function Home({ searchParams }: Props) {
-  const posts = getAllPosts();
+  const posts = await getAllPosts();
   const sp = await searchParams;
   const forbidden = sp.forbidden === "1";
 
@@ -28,14 +28,10 @@ export default async function Home({ searchParams }: Props) {
       <PageIntro />
       {posts.length === 0 ? (
         <p className="font-serif text-lg text-[var(--ink-soft)]">
-          Nessun articolo ancora. Aggiungi un file{" "}
-          <code className="rounded bg-[var(--cream-dark)] px-1.5 py-0.5 font-mono text-sm">
-            .md
-          </code>{" "}
-          in{" "}
-          <code className="rounded bg-[var(--cream-dark)] px-1.5 py-0.5 font-mono text-sm">
-            content/posts
-          </code>
+          Nessun articolo ancora. Pubblicane uno dalla{" "}
+          <a href="/redazione" className="text-[var(--wine)] underline underline-offset-2">
+            redazione
+          </a>
           .
         </p>
       ) : (

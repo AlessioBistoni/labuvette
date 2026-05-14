@@ -16,7 +16,7 @@ type Props = {
 
 export default async function RedazioneHome({ searchParams }: Props) {
   const sp = await searchParams;
-  const posts = getAllPosts();
+  const posts = await getAllPosts();
   const alert = errMessage(sp.err);
   const deleted = sp.deleted === "1";
 
@@ -37,8 +37,8 @@ export default async function RedazioneHome({ searchParams }: Props) {
           Redazione
         </h1>
         <p className="mt-4 max-w-xl font-serif text-lg leading-relaxed text-[var(--ink-soft)]">
-          Crea e modifica gli articoli in Markdown. Il blog resta visibile a tutti;
-          solo chi ha accesso può entrare qui.
+          Crea e modifica gli articoli salvati nel database. Il blog resta visibile a
+          tutti; solo chi ha accesso può entrare qui.
         </p>
         <div className="mt-8 flex flex-wrap gap-4">
           <Link
@@ -62,7 +62,7 @@ export default async function RedazioneHome({ searchParams }: Props) {
           className="mt-8 rounded border border-[var(--line)] bg-[var(--cream-dark)]/60 px-4 py-3 font-sans text-sm text-[var(--ink)]"
           role="status"
         >
-          Articolo eliminato.
+          Articolo eliminato definitivamente dal database.
         </p>
       ) : null}
 

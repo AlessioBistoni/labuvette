@@ -1,24 +1,33 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import { getSession } from "@/lib/get-session";
 import { createAdminAction } from "./actions";
+import { DeleteAdminForm } from "./delete-admin-form";
 
 type Props = {
   searchParams: Promise<{
     created?: string;
+    deleted?: string;
     err?: string;
   }>;
 };
 
 function errMessage(code: string | undefined) {
   switch (code) {
-    case "email":
-      return "Inserisci un indirizzo email valido.";
+    case "username":
+      return "Il nome utente non è valido (3–32 caratteri, lettere minuscole, numeri, _ e -).";
     case "name":
-      return "Il nome deve avere almeno 2 caratteri.";
+      return "Il nome visualizzato deve avere almeno 2 caratteri.";
     case "pwd":
-      return "La password deve avere almeno 12 caratteri.";
+      return "La password è obbligatoria.";
     case "taken":
-      return "Questa email è già registrata.";
+      return "Questo nome utente è già in uso.";
+    case "missing":
+      return "Account non trovato.";
+    case "owner":
+      return "Non puoi eliminare un proprietario.";
+    case "self":
+      return "Non puoi eliminare il tuo account da qui.";
     default:
       return null;
   }
@@ -26,6 +35,7 @@ function errMessage(code: string | undefined) {
 
 export default async function GestionePage({ searchParams }: Props) {
   const sp = await searchParams;
+  const session = await getSession();
   const adminsRaw = await prisma.admin.findMany({
     orderBy: { createdAt: "asc" },
   });
@@ -35,6 +45,7 @@ export default async function GestionePage({ searchParams }: Props) {
   });
   const alert = errMessage(sp.err);
   const created = sp.created === "1";
+  const deleted = sp.deleted === "1";
 
   return (
     <main className="mx-auto max-w-2xl px-5 pb-24 pt-10 sm:px-8 sm:pt-14">
@@ -59,13 +70,22 @@ export default async function GestionePage({ searchParams }: Props) {
         </p>
       </header>
 
+      {deleted ? (
+        <p
+          className="mt-8 rounded border border-[var(--line)] bg-[var(--cream-dark)]/60 px-4 py-3 font-sans text-sm text-[var(--ink)]"
+          role="status"
+        >
+          Account amministratore eliminato.
+        </p>
+      ) : null}
+
       {created ? (
         <p
           className="mt-8 rounded border border-[var(--line)] bg-[var(--cream-dark)]/60 px-4 py-3 font-sans text-sm text-[var(--ink)]"
           role="status"
         >
-          Nuovo amministratore creato. Comunica loro email e password usate qui per
-          il primo accesso.
+          Nuovo amministratore creato. Comunica loro nome utente e password usati qui
+          per il primo accesso.
         </p>
       ) : null}
 
@@ -86,17 +106,22 @@ export default async function GestionePage({ searchParams }: Props) {
           {admins.map((a) => (
             <li
               key={a.id}
-              className="flex flex-wrap items-baseline justify-between gap-3 py-4"
+              className="flex flex-wrap items-center justify-between gap-3 py-4"
             >
               <div>
                 <p className="font-serif text-xl text-[var(--ink)]">{a.name}</p>
-                <p className="mt-1 font-sans text-sm text-[var(--ink-soft)]">
-                  {a.email}
+                <p className="mt-1 font-mono text-sm text-[var(--ink-soft)]">
+                  @{a.username}
                 </p>
               </div>
-              <span className="font-sans text-[10px] uppercase tracking-[0.2em] text-[var(--ink-muted)]">
-                {a.role === "OWNER" ? "Proprietario" : "Amministratore"}
-              </span>
+              <div className="flex items-center gap-4">
+                <span className="font-sans text-[10px] uppercase tracking-[0.2em] text-[var(--ink-muted)]">
+                  {a.role === "OWNER" ? "Proprietario" : "Amministratore"}
+                </span>
+                {a.role === "ADMIN" && a.id !== session?.sub ? (
+                  <DeleteAdminForm adminId={a.id} username={a.username} />
+                ) : null}
+              </div>
             </li>
           ))}
         </ul>
@@ -125,18 +150,20 @@ export default async function GestionePage({ searchParams }: Props) {
           </div>
           <div>
             <label
-              htmlFor="g-email"
+              htmlFor="g-username"
               className="block font-sans text-[11px] uppercase tracking-[0.22em] text-[var(--ink-muted)]"
             >
-              Email (usata per accedere)
+              Nome utente (per accedere)
             </label>
             <input
-              id="g-email"
-              name="email"
-              type="email"
+              id="g-username"
+              name="username"
               required
+              minLength={3}
+              maxLength={32}
               autoComplete="off"
-              className="mt-2 w-full border border-[var(--line)] bg-[var(--paper)] px-4 py-3 font-serif text-lg text-[var(--ink)] outline-none transition-shadow focus:ring-2 focus:ring-[var(--wine)]/25"
+              placeholder="es. mario_rossi"
+              className="mt-2 w-full border border-[var(--line)] bg-[var(--paper)] px-4 py-3 font-mono text-sm text-[var(--ink)] outline-none transition-shadow focus:ring-2 focus:ring-[var(--wine)]/25"
             />
           </div>
           <div>
@@ -144,14 +171,13 @@ export default async function GestionePage({ searchParams }: Props) {
               htmlFor="g-password"
               className="block font-sans text-[11px] uppercase tracking-[0.22em] text-[var(--ink-muted)]"
             >
-              Password iniziale (min. 12 caratteri)
+              Password iniziale
             </label>
             <input
               id="g-password"
               name="password"
               type="password"
               required
-              minLength={12}
               autoComplete="new-password"
               className="mt-2 w-full border border-[var(--line)] bg-[var(--paper)] px-4 py-3 font-serif text-lg text-[var(--ink)] outline-none transition-shadow focus:ring-2 focus:ring-[var(--wine)]/25"
             />

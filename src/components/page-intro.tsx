@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { motion } from "framer-motion";
 import { site } from "@/config/site";
 
@@ -27,19 +26,6 @@ export function PageIntro() {
         Non prendiamo prenotazioni: arriviamo quando abbiamo qualcosa da
         condividere. Un articolo ogni dieci giorni, più o meno.
       </p>
-      <motion.div
-        className="mt-10"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.2, duration: 0.45 }}
-      >
-        <Link
-          href="/redazione"
-          className="inline-flex items-center border border-[var(--ink)] bg-[var(--ink)] px-6 py-3 font-sans text-[10px] uppercase tracking-[0.26em] text-[var(--paper)] transition-colors hover:bg-transparent hover:text-[var(--ink)]"
-        >
-          Area Riservata
-        </Link>
-      </motion.div>
     </motion.section>
   );
 }

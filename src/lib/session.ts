@@ -10,7 +10,7 @@ export type AdminRoleClaim = "OWNER" | "ADMIN";
 
 export type SessionPayload = {
   sub: string;
-  email: string;
+  username: string;
   name: string;
   role: AdminRoleClaim;
 };
@@ -41,7 +41,7 @@ export async function createSessionToken(
   const key = resolveSecretKey();
   if (!key) return null;
   return new SignJWT({
-    email: session.email,
+    username: session.username,
     name: session.name,
     role: session.role,
   })
@@ -61,12 +61,12 @@ export async function verifySessionToken(
     const { payload } = await jwtVerify(token, key);
     const sub = payload.sub;
     if (typeof sub !== "string" || !sub) return null;
-    const email = payload.email;
+    const username = payload.username;
     const name = payload.name;
-    if (typeof email !== "string" || typeof name !== "string") return null;
+    if (typeof username !== "string" || typeof name !== "string") return null;
     return {
       sub,
-      email,
+      username,
       name,
       role: parseRole(payload.role),
     };

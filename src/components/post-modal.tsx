@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { MarkdownBody } from "@/components/markdown-body";
+import { ArticleBody } from "@/components/article-body";
 import type { Post } from "@/lib/post-types";
 import { resolvePostCardPreview, resolvePostCover } from "@/lib/post-display";
 
@@ -171,7 +171,7 @@ export function PostModal({ post, locale, onClose }: Props) {
                   {resolvePostCardPreview(post)}
                 </p>
                 <div className="mt-10">
-                  <MarkdownBody content={post.content} />
+                  <ArticleBody content={post.content} />
                 </div>
               </div>
             </motion.article>

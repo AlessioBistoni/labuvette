@@ -28,7 +28,7 @@ export async function SiteHeader() {
               href="/gestione"
               className="font-sans text-xs uppercase tracking-[0.2em] text-[var(--ink-muted)] hover:text-[var(--ink)] transition-colors duration-300"
             >
-              Gestione
+              Gestione amministratori
             </Link>
           ) : null}
           {session ? (

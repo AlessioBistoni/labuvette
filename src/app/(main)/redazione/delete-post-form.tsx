@@ -14,7 +14,7 @@ export function DeletePostForm({ slug }: Props) {
       onSubmit={(e) => {
         if (
           !confirm(
-            "Eliminare definitivamente questo articolo dal disco? L’operazione non è annullabile.",
+            "Eliminare definitivamente questo articolo dal database? L’operazione non è annullabile.",
           )
         ) {
           e.preventDefault();

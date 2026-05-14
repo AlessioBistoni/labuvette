@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { CoverImagePicker } from "@/components/cover-image-picker";
+import { RichTextEditor } from "@/components/rich-text-editor";
 import { createPostAction } from "../actions";
 
 function errMsg(code: string | undefined) {
@@ -13,6 +15,8 @@ function errMsg(code: string | undefined) {
       return "Il testo dell’articolo è troppo breve.";
     case "date":
       return "La data non è valida (usa il formato del calendario).";
+    case "cover":
+      return "Immagine di copertina non valida o formato non supportato.";
     default:
       return null;
   }
@@ -125,38 +129,27 @@ export default async function NuovoArticoloPage({ searchParams }: Props) {
           />
         </div>
         <div>
-          <label
-            htmlFor="cover"
-            className="block font-sans text-[11px] uppercase tracking-[0.22em] text-[var(--ink-muted)]"
-          >
-            Immagine di copertina (opzionale)
-          </label>
-          <input
-            id="cover"
-            name="cover"
-            placeholder="/covers/buvette-1.png"
-            className="mt-2 w-full border border-[var(--line)] bg-[var(--paper)] px-4 py-3 font-mono text-sm text-[var(--ink)] outline-none focus:ring-2 focus:ring-[var(--wine)]/25"
-          />
+          <span className="block font-sans text-[11px] uppercase tracking-[0.22em] text-[var(--ink-muted)]">
+            Copertina (opzionale)
+          </span>
+          <div className="mt-2">
+            <CoverImagePicker />
+          </div>
           <p className="mt-2 font-sans text-xs text-[var(--ink-faint)]">
-            Path in <code className="font-mono">public/</code> (es.{" "}
-            <code className="font-mono">/covers/…</code>) oppure URL https.
-            Se vuoto, si usa un&apos;immagine di default a rotazione.
+            Se non scegli un&apos;immagine, si usa una copertina di default.
           </p>
         </div>
         <div>
-          <label
-            htmlFor="body"
-            className="block font-sans text-[11px] uppercase tracking-[0.22em] text-[var(--ink-muted)]"
-          >
-            Corpo (Markdown)
-          </label>
-          <textarea
-            id="body"
-            name="body"
-            required
-            rows={16}
-            className="mt-2 w-full border border-[var(--line)] bg-[var(--paper)] px-4 py-3 font-mono text-sm leading-relaxed text-[var(--ink)] outline-none focus:ring-2 focus:ring-[var(--wine)]/25"
-          />
+          <span className="block font-sans text-[11px] uppercase tracking-[0.22em] text-[var(--ink-muted)]">
+            Testo articolo
+          </span>
+          <div className="mt-2">
+            <RichTextEditor name="body" />
+          </div>
+          <p className="mt-2 font-sans text-xs text-[var(--ink-faint)]">
+            Seleziona il testo per la barra rapida, oppure usa gli strumenti che
+            compaiono quando il cursore è nel campo.
+          </p>
         </div>
         <button
           type="submit"
