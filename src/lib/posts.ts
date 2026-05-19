@@ -5,7 +5,6 @@ import {
   getPostBySlugFromFiles,
 } from "@/lib/posts-from-files";
 import type { PostSection } from "@/config/sections";
-import { parsePostSection } from "@/lib/sections";
 import type { Post } from "@/lib/post-types";
 
 export type { Post, PostMeta } from "@/lib/post-types";

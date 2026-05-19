@@ -1,6 +1,7 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { PageIntro } from "@/components/page-intro";
-import { BlogFeed } from "@/components/blog-feed";
+import { PostList } from "@/components/post-list";
 import { site } from "@/config/site";
 import { parsePostSection } from "@/lib/sections";
 import { getAllPosts } from "@/lib/posts";
@@ -39,13 +40,13 @@ export default async function Home({ searchParams }: Props) {
             ? `Nessun articolo in «${section}» per ora.`
             : "Nessun articolo ancora."}{" "}
           Pubblicane uno dalla{" "}
-          <a href="/redazione" className="text-[var(--wine)] underline underline-offset-2">
+          <Link href="/redazione" className="text-[var(--wine)] underline underline-offset-2">
             redazione
-          </a>
+          </Link>
           .
         </p>
       ) : (
-        <BlogFeed posts={posts} locale={site.locale} />
+        <PostList posts={posts} locale={site.locale} />
       )}
     </main>
   );

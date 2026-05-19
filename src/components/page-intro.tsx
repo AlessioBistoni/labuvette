@@ -1,5 +1,6 @@
 import { site } from "@/config/site";
 import type { PostSection } from "@/config/sections";
+import { playfairStyle } from "@/lib/typography";
 
 type Props = {
   activeSection?: PostSection | null;
@@ -13,9 +14,7 @@ export function PageIntro({ activeSection = null }: Props) {
       </p>
       <h1
         className="mt-4 max-w-3xl text-3xl font-semibold leading-[1.08] tracking-tight text-[var(--ink)] sm:mt-5 sm:text-5xl md:text-[3.25rem]"
-        style={{
-          fontFamily: "var(--font-playfair), ui-serif, Georgia, serif",
-        }}
+        style={playfairStyle}
       >
         {activeSection ? activeSection : site.description}
       </h1>

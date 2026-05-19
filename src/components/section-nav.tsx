@@ -7,7 +7,7 @@ import { SECTION_NAV } from "@/config/sections";
 
 const ICON_SIZE = 48;
 
-function sectionHref(id: string) {
+function sectionHref(id: (typeof SECTION_NAV)[number]["id"]) {
   return `/?section=${encodeURIComponent(id)}`;
 }
 

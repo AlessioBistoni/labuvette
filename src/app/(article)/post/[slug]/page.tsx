@@ -4,20 +4,14 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ArticleBody } from "@/components/article-body";
 import { site } from "@/config/site";
+import { formatDate } from "@/lib/format-date";
 import { resolvePostCardPreview, resolvePostCover } from "@/lib/post-display";
+import { playfairStyle } from "@/lib/typography";
 import { getPostBySlug } from "@/lib/posts";
 
 export const dynamic = "force-dynamic";
 
 type Props = { params: Promise<{ slug: string }> };
-
-function formatDate(iso: string, locale: string) {
-  return new Intl.DateTimeFormat(locale, {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  }).format(new Date(iso));
-}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
@@ -69,9 +63,7 @@ export default async function PostPage({ params }: Props) {
           </div>
           <h1
             className="mt-5 max-w-4xl break-words text-left text-[2rem] font-semibold leading-[1.08] tracking-tight text-[var(--ink)] sm:mt-6 sm:text-5xl lg:text-[3.25rem]"
-            style={{
-              fontFamily: "var(--font-playfair), ui-serif, Georgia, serif",
-            }}
+            style={playfairStyle}
           >
             {post.title}
           </h1>
