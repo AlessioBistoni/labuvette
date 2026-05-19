@@ -10,6 +10,7 @@ import {
   postExists,
   updatePost,
 } from "@/lib/posts";
+import { parsePostSection } from "@/lib/sections";
 import { sanitizeSlug } from "@/lib/slug";
 import {
   htmlPlainTextLength,
@@ -62,6 +63,15 @@ async function resolveCoverFromForm(
   return existingCover ?? undefined;
 }
 
+function parseSectionFromForm(formData: FormData, errRedirect: string) {
+  const section = parsePostSection(String(formData.get("section") ?? ""));
+  if (!section) {
+    const sep = errRedirect.includes("?") ? "&" : "?";
+    redirect(`${errRedirect}${sep}err=section`);
+  }
+  return section;
+}
+
 export async function createPostAction(formData: FormData) {
   await requireEditor();
 
@@ -79,6 +89,7 @@ export async function createPostAction(formData: FormData) {
   const date = parseIsoDate(String(formData.get("date") ?? ""), "/redazione/nuovo");
   const author = String(formData.get("author") ?? "").trim();
   const excerpt = String(formData.get("excerpt") ?? "").trim();
+  const section = parseSectionFromForm(formData, "/redazione/nuovo");
   const bodyRaw = String(formData.get("body") ?? "");
   const body = sanitizeArticleHtml(bodyRaw);
 
@@ -106,6 +117,7 @@ export async function createPostAction(formData: FormData) {
     author: author || undefined,
     excerpt: excerpt || undefined,
     cover,
+    section,
     content: body,
   });
 
@@ -135,6 +147,7 @@ export async function updatePostAction(formData: FormData) {
   );
   const author = String(formData.get("author") ?? "").trim();
   const excerpt = String(formData.get("excerpt") ?? "").trim();
+  const section = parseSectionFromForm(formData, `/redazione/${slug}`);
   const bodyRaw = String(formData.get("body") ?? "");
   const body = sanitizeArticleHtml(bodyRaw);
 
@@ -150,6 +163,7 @@ export async function updatePostAction(formData: FormData) {
     author: author || undefined,
     excerpt: excerpt || undefined,
     cover,
+    section,
     content: body,
   });
 

@@ -28,6 +28,8 @@ model Post {
   excerpt   String?
   /// Path pubblico es. /uploads/posts/slug.jpg
   cover     String?
+  /// Economia | Cultura | Cucina
+  section   String?
   content   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

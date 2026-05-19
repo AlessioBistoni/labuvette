@@ -22,8 +22,6 @@ export async function proxy(request: NextRequest) {
     pathname === "/gestione" || pathname.startsWith("/gestione/");
   const isRedazione =
     pathname === "/redazione" || pathname.startsWith("/redazione/");
-  const isDecapAdmin =
-    pathname === "/admin" || pathname.startsWith("/admin/");
 
   if (isGestione) {
     if (!session) return redirectToLogin(request, pathname);
@@ -31,7 +29,7 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  if (isRedazione || isDecapAdmin) {
+  if (isRedazione) {
     if (!session) return redirectToLogin(request, pathname);
     return NextResponse.next();
   }
@@ -45,7 +43,5 @@ export const config = {
     "/gestione/:path*",
     "/redazione",
     "/redazione/:path*",
-    "/admin",
-    "/admin/:path*",
   ],
 };

@@ -4,6 +4,8 @@ import {
   getAllPostsFromFiles,
   getPostBySlugFromFiles,
 } from "@/lib/posts-from-files";
+import type { PostSection } from "@/config/sections";
+import { parsePostSection } from "@/lib/sections";
 import type { Post } from "@/lib/post-types";
 
 export type { Post, PostMeta } from "@/lib/post-types";
@@ -16,6 +18,7 @@ function toPost(row: DbPost): Post {
     author: row.author ?? undefined,
     excerpt: row.excerpt ?? undefined,
     cover: row.cover ?? undefined,
+    section: row.section ?? undefined,
     content: row.content,
   };
 }
@@ -33,10 +36,11 @@ function shouldUseDatabase(): boolean {
   return true;
 }
 
-export async function getAllPosts(): Promise<Post[]> {
+export async function getAllPosts(section?: PostSection | null): Promise<Post[]> {
   if (shouldUseDatabase()) {
     try {
       const rows = await prisma.post.findMany({
+        where: section ? { section } : undefined,
         orderBy: { date: "desc" },
       });
       return rows.map(toPost);
@@ -44,7 +48,9 @@ export async function getAllPosts(): Promise<Post[]> {
       console.error("[posts] DB non disponibile, fallback su file markdown", error);
     }
   }
-  return getAllPostsFromFiles();
+  const all = getAllPostsFromFiles();
+  if (!section) return all;
+  return all.filter((p) => p.section === section);
 }
 
 export async function getPostBySlug(slug: string): Promise<Post | null> {
@@ -74,6 +80,7 @@ export type PostInput = {
   author?: string;
   excerpt?: string;
   cover?: string;
+  section?: PostSection;
   content: string;
 };
 
@@ -86,6 +93,7 @@ export async function createPost(data: PostInput): Promise<Post> {
       author: data.author ?? null,
       excerpt: data.excerpt ?? null,
       cover: data.cover ?? null,
+      section: data.section ?? null,
       content: data.content,
     },
   });
@@ -104,6 +112,7 @@ export async function updatePost(
       author: data.author ?? null,
       excerpt: data.excerpt ?? null,
       cover: data.cover ?? null,
+      section: data.section ?? null,
       content: data.content,
     },
   });

@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
+import { parsePostSection } from "@/lib/sections";
 import type { Post } from "@/lib/post-types";
 
 const postsDir = path.join(process.cwd(), "content/posts");
@@ -27,6 +28,9 @@ function parseFile(slug: string, raw: string): Post {
     author: typeof data.author === "string" ? data.author : undefined,
     excerpt: typeof data.excerpt === "string" ? data.excerpt : undefined,
     cover: sanitizeCover(data.cover),
+    section: parsePostSection(
+      typeof data.section === "string" ? data.section : undefined,
+    ) ?? undefined,
     content: content.trim(),
   };
 }

@@ -23,11 +23,12 @@ const ALLOWED_TAGS = [
 const ALLOWED_ATTR = ["style", "href", "target", "rel", "class"];
 
 export function sanitizeArticleHtml(html: string): string {
-  return DOMPurify.sanitize(html.trim(), {
+  const clean = DOMPurify.sanitize(html.trim(), {
     ALLOWED_TAGS,
     ALLOWED_ATTR,
     ALLOW_DATA_ATTR: false,
   });
+  return clean.replace(/white-space\s*:\s*nowrap/gi, "white-space:normal");
 }
 
 export function htmlPlainTextLength(html: string): number {

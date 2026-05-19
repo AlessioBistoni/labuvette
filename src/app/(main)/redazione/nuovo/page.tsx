@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CoverImagePicker } from "@/components/cover-image-picker";
 import { RichTextEditor } from "@/components/rich-text-editor";
+import { SectionSelect } from "@/components/section-select";
 import { createPostAction } from "../actions";
 
 function errMsg(code: string | undefined) {
@@ -17,6 +18,8 @@ function errMsg(code: string | undefined) {
       return "La data non è valida (usa il formato del calendario).";
     case "cover":
       return "Immagine di copertina non valida o formato non supportato.";
+    case "section":
+      return "Seleziona una sezione: Economia, Cultura o Cucina.";
     default:
       return null;
   }
@@ -100,6 +103,9 @@ export default async function NuovoArticoloPage({ searchParams }: Props) {
             defaultValue={today}
             className="mt-2 w-full border border-[var(--line)] bg-[var(--paper)] px-4 py-3 font-sans text-sm text-[var(--ink)] outline-none focus:ring-2 focus:ring-[var(--wine)]/25"
           />
+        </div>
+        <div>
+          <SectionSelect defaultValue="Economia" />
         </div>
         <div>
           <label

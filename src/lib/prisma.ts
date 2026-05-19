@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import { PrismaLibSQL } from "@prisma/adapter-libsql";
 import { createClient } from "@libsql/client";
 
@@ -31,10 +31,19 @@ function createPrismaClient() {
   return new PrismaClient({ log });
 }
 
+function isClientUpToDate(client: PrismaClient | undefined): client is PrismaClient {
+  if (!client || !("post" in client)) return false;
+  return "section" in Prisma.PostScalarFieldEnum;
+}
+
 function getPrismaClient(): PrismaClient {
   const cached = globalForPrisma.prisma;
-  if (cached && "post" in cached) {
+  if (isClientUpToDate(cached)) {
     return cached;
+  }
+  if (cached) {
+    void (cached as PrismaClient).$disconnect().catch(() => undefined);
+    globalForPrisma.prisma = undefined;
   }
   const client = createPrismaClient();
   if (process.env.NODE_ENV !== "production") {

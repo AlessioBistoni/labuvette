@@ -5,6 +5,8 @@ export type PostMeta = {
   author?: string;
   excerpt?: string;
   cover?: string;
+  /** Economia | Cultura | Cucina */
+  section?: string;
 };
 
 export type Post = PostMeta & {

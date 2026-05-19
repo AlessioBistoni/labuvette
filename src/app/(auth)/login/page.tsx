@@ -39,7 +39,7 @@ export default async function LoginPage({ searchParams }: Props) {
         Accedi
       </h1>
       <p className="mt-4 font-serif text-lg leading-relaxed text-[var(--ink-soft)]">
-        Accedi con nome utente e password per aprire la redazione o il CMS.
+        Accedi con nome utente e password per aprire la redazione.
       </p>
 
       {missingProdSecret ? (

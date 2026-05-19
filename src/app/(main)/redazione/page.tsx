@@ -40,19 +40,12 @@ export default async function RedazioneHome({ searchParams }: Props) {
           Crea e modifica gli articoli salvati nel database. Il blog resta visibile a
           tutti; solo chi ha accesso può entrare qui.
         </p>
-        <div className="mt-8 flex flex-wrap gap-4">
+        <div className="mt-8">
           <Link
             href="/redazione/nuovo"
             className="inline-flex border border-[var(--ink)] bg-[var(--ink)] px-5 py-3 font-sans text-xs uppercase tracking-[0.2em] text-[var(--paper)] transition-colors hover:bg-[var(--wine)] hover:border-[var(--wine)]"
           >
             Nuovo articolo
-          </Link>
-          <Link
-            href="/admin"
-            prefetch={false}
-            className="inline-flex border border-[var(--line)] bg-transparent px-5 py-3 font-sans text-xs uppercase tracking-[0.2em] text-[var(--ink-muted)] transition-colors hover:border-[var(--wine)] hover:text-[var(--wine)]"
-          >
-            CMS Decap (Git)
           </Link>
         </div>
       </header>

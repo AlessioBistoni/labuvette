@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CoverImagePicker } from "@/components/cover-image-picker";
 import { RichTextEditor } from "@/components/rich-text-editor";
+import { SectionSelect } from "@/components/section-select";
 import { getPostBySlug } from "@/lib/posts";
 import { updatePostAction } from "../actions";
 import { DeletePostForm } from "../delete-post-form";
@@ -21,6 +22,8 @@ function errMsg(code: string | undefined) {
       return "La data non è valida.";
     case "cover":
       return "Immagine di copertina non valida o formato non supportato.";
+    case "section":
+      return "Seleziona una sezione: Economia, Cultura o Cucina.";
     default:
       return null;
   }
@@ -58,7 +61,7 @@ export default async function ModificaArticoloPage({ params, searchParams }: Pro
           role="status"
         >
           Modifiche salvate.{" "}
-          <Link href={`/?post=${post.slug}`} className="text-[var(--wine)] underline underline-offset-2">
+          <Link href={`/post/${post.slug}`} className="text-[var(--wine)] underline underline-offset-2">
             Vedi sul sito
           </Link>
         </p>
@@ -134,6 +137,9 @@ export default async function ModificaArticoloPage({ params, searchParams }: Pro
             defaultValue={post.excerpt ?? ""}
             className="mt-2 w-full border border-[var(--line)] bg-[var(--paper)] px-4 py-3 font-serif text-base text-[var(--ink)] outline-none focus:ring-2 focus:ring-[var(--wine)]/25"
           />
+        </div>
+        <div>
+          <SectionSelect defaultValue={post.section ?? "Economia"} />
         </div>
         <div>
           <span className="block font-sans text-[11px] uppercase tracking-[0.22em] text-[var(--ink-muted)]">
