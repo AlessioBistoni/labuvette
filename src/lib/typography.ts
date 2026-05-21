@@ -1,5 +1,11 @@
-import type { CSSProperties } from "react";
+/** Titolo display split (home, redazione, gestione). */
+export const splitClass = "font-split";
 
-export const playfairStyle: CSSProperties = {
-  fontFamily: "var(--font-playfair), ui-serif, Georgia, serif",
-};
+/** Etichette e microcopy del sito (footer, sezioni, link). */
+export const splitSmClass = "font-split-sm";
+
+/** Split su sfondo scuro — solo UI sito, non titoli post. */
+export const splitOnDarkClass = "font-split-on-dark";
+
+/** Testo degli articoli (titolo post, corpo, estratti). */
+export const postClass = "font-post";

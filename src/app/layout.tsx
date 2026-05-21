@@ -1,33 +1,29 @@
 import type { Viewport } from "next";
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Jost, Geist_Mono, Playfair_Display } from "next/font/google";
+import { Bebas_Neue, Cormorant_Garamond, Jost } from "next/font/google";
 import "./globals.css";
 import { site } from "@/config/site";
 
-const serif = Cormorant_Garamond({
+const ui = Jost({
   subsets: ["latin", "latin-ext"],
   weight: ["400", "500", "600"],
-  variable: "--font-serif-display",
+  variable: "--font-ui",
   display: "swap",
 });
 
-const sans = Jost({
+const post = Cormorant_Garamond({
   subsets: ["latin", "latin-ext"],
   weight: ["400", "500", "600"],
-  variable: "--font-sans-ui",
+  variable: "--font-post",
   display: "swap",
 });
 
-const playfair = Playfair_Display({
+/** Titoli e scritte del sito — effetto split (metà superiore chiara, metà inferiore piena). */
+const display = Bebas_Neue({
   subsets: ["latin", "latin-ext"],
-  weight: ["400", "600", "700"],
-  variable: "--font-playfair",
+  weight: "400",
+  variable: "--font-display",
   display: "swap",
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
@@ -52,7 +48,7 @@ export default function RootLayout({
   return (
     <html
       lang="it"
-      className={`${serif.variable} ${sans.variable} ${geistMono.variable} ${playfair.variable} min-h-dvh antialiased`}
+      className={`${ui.variable} ${post.variable} ${display.variable} min-h-dvh antialiased`}
     >
       <body className="flex min-h-dvh flex-col overflow-x-hidden">{children}</body>
     </html>

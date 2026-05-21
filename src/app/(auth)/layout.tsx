@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { splitSmClass } from "@/lib/typography";
 
 export default function AuthLayout({
   children,
@@ -9,7 +10,7 @@ export default function AuthLayout({
     <div className="relative flex min-h-screen flex-col items-center justify-center px-5 py-16">
       <Link
         href="/"
-        className="fixed left-0 top-0 z-50 inline-flex items-center gap-2 p-4 font-sans text-sm font-normal uppercase tracking-[0.26em] text-[var(--ink)] transition-colors hover:text-[var(--ink-soft)] sm:p-5 sm:text-base"
+        className={`fixed left-0 top-0 z-50 inline-flex items-center gap-2 p-4 text-sm font-normal tracking-[0.26em] transition-opacity hover:opacity-70 sm:p-5 sm:text-base ${splitSmClass}`}
         aria-label="Torna alla home"
       >
         <span className="leading-none" aria-hidden>

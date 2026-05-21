@@ -44,7 +44,7 @@ export default async function NuovoArticoloPage({ searchParams }: Props) {
       </Link>
 
       <header className="mt-8 border-b border-[var(--line)] pb-10">
-        <h1 className="font-serif text-4xl font-medium tracking-tight text-[var(--ink)]">
+        <h1 className="font-split text-4xl">
           Nuovo articolo
         </h1>
       </header>

@@ -35,7 +35,7 @@ export default async function LoginPage({ searchParams }: Props) {
       <p className="font-sans text-[11px] uppercase tracking-[0.28em] text-[var(--ink-muted)]">
         Accesso riservato
       </p>
-      <h1 className="mt-3 font-serif text-4xl font-medium tracking-tight text-[var(--ink)]">
+      <h1 className="font-split mt-3 text-4xl">
         Accedi
       </h1>
       <p className="mt-4 font-serif text-lg leading-relaxed text-[var(--ink-soft)]">

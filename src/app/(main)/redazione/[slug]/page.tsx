@@ -49,7 +49,7 @@ export default async function ModificaArticoloPage({ params, searchParams }: Pro
       </Link>
 
       <header className="mt-8 border-b border-[var(--line)] pb-10">
-        <h1 className="font-serif text-4xl font-medium tracking-tight text-[var(--ink)]">
+        <h1 className="font-split text-4xl">
           Modifica articolo
         </h1>
         <p className="mt-2 font-mono text-sm text-[var(--ink-soft)]">{post.slug}</p>
