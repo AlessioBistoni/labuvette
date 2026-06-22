@@ -1,4 +1,4 @@
-import DOMPurify from "isomorphic-dompurify";
+import sanitizeHtml from "sanitize-html";
 
 const ALLOWED_TAGS = [
   "p",
@@ -20,13 +20,20 @@ const ALLOWED_TAGS = [
   "span",
 ];
 
-const ALLOWED_ATTR = ["style", "href", "target", "rel", "class"];
-
 export function sanitizeArticleHtml(html: string): string {
-  const clean = DOMPurify.sanitize(html.trim(), {
-    ALLOWED_TAGS,
-    ALLOWED_ATTR,
-    ALLOW_DATA_ATTR: false,
+  const clean = sanitizeHtml(html.trim(), {
+    allowedTags: ALLOWED_TAGS,
+    allowedAttributes: {
+      "*": ["class", "style"],
+      a: ["href", "target", "rel"],
+    },
+    allowedSchemes: ["http", "https", "mailto"],
+    allowedStyles: {
+      "*": {
+        color: [/^#[0-9a-f]{6}$/i],
+        "font-size": [/^(?:12|14|16|18|20|24|30|36)px$/],
+      },
+    },
   });
   return clean.replace(/white-space\s*:\s*nowrap/gi, "white-space:normal");
 }

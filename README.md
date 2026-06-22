@@ -1,36 +1,85 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# La Buvette
 
-## Getting Started
+Blog Next.js con redazione privata, Prisma/Turso e copertine su Vercel Blob.
 
-First, run the development server:
+## Sviluppo locale
+
+Requisiti: Node.js 20.19 o superiore.
 
 ```bash
+npm install
+cp .env.example .env.local
+npx prisma migrate deploy
+npm run db:seed
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Genera l'hash della password amministratore con:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run hash-password -- "una-password-lunga-e-unica"
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Inserisci il risultato in `SEED_ADMIN_PASSWORD_HASH` prima del seed.
 
-## Learn More
+## Variabili Vercel
 
-To learn more about Next.js, take a look at the following resources:
+Configura in `Project → Settings → Environment Variables`:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```text
+DATABASE_URL=libsql://...
+TURSO_DATABASE_URL=libsql://...
+TURSO_AUTH_TOKEN=...
+AUTH_SECRET=...
+BLOB_READ_WRITE_TOKEN=...
+SITE_URL=https://dominio.example
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+`AUTH_SECRET` deve contenere almeno 32 caratteri. Puoi generarlo con:
 
-## Deploy on Vercel
+```bash
+openssl rand -hex 32
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Le variabili `SEED_ADMIN_*` servono sulla macchina dalla quale esegui il seed,
+non durante il normale funzionamento del sito.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Database Turso
+
+Per trasferire un database esistente:
+
+```bash
+turso db shell DATABASE_ORIGINE .dump > labuvette.sql
+turso db create labuvette --from-dump ./labuvette.sql
+turso db show labuvette --url
+turso db tokens create labuvette
+```
+
+Aggiorna quindi le variabili Vercel con URL e token del nuovo database.
+
+## Copertine
+
+In produzione le nuove copertine vengono salvate su Vercel Blob. Crea un Blob
+Store pubblico da `Project → Storage → Blob`; Vercel aggiungerà automaticamente
+`BLOB_READ_WRITE_TOKEN`. In locale, senza token, i file restano sotto
+`public/uploads/posts`.
+
+Dimensione massima accettata per una copertina: 3 MB.
+
+## Dominio
+
+1. Apri `Vercel → Project → Settings → Domains`.
+2. Aggiungi dominio principale e variante `www`.
+3. Imposta un redirect verso la variante preferita.
+4. Copia nel registrar i record DNS indicati da Vercel.
+5. Imposta `SITE_URL` sul dominio principale e avvia un nuovo deploy.
+6. Verifica `/robots.txt`, `/sitemap.xml`, login e caricamento copertine.
+
+Non rimuovere dal registrar eventuali record MX/TXT usati dalla posta.
+
+## Controlli prima del deploy
+
+```bash
+npm run lint
+npm run build
+```

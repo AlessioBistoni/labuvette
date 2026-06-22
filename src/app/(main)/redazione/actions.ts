@@ -46,9 +46,12 @@ async function resolveCoverFromForm(
   const coverUrl = String(formData.get("coverUrl") ?? "").trim();
 
   if (coverFile instanceof File && coverFile.size > 0) {
-    if (isManagedUpload(existingCover)) deleteUploadFile(existingCover!);
     try {
-      return await saveCoverUpload(coverFile, slug);
+      const nextCover = await saveCoverUpload(coverFile, slug);
+      if (isManagedUpload(existingCover)) {
+        await deleteUploadFile(existingCover!);
+      }
+      return nextCover;
     } catch {
       redirect(`/redazione/${slug}?err=cover`);
     }
@@ -122,6 +125,7 @@ export async function createPostAction(formData: FormData) {
   });
 
   revalidatePath("/");
+  revalidatePath("/sitemap.xml");
   redirect(`/redazione/${slug}?saved=1`);
 }
 
@@ -168,6 +172,7 @@ export async function updatePostAction(formData: FormData) {
   });
 
   revalidatePath("/");
+  revalidatePath("/sitemap.xml");
   redirect(`/redazione/${slug}?saved=1`);
 }
 
@@ -185,9 +190,10 @@ export async function deletePostAction(formData: FormData) {
   }
 
   if (isManagedUpload(removed.cover)) {
-    deleteUploadFile(removed.cover!);
+    await deleteUploadFile(removed.cover!);
   }
 
   revalidatePath("/");
+  revalidatePath("/sitemap.xml");
   redirect("/redazione?deleted=1");
 }

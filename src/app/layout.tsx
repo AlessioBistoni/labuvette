@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Cormorant_Garamond, Jost, Geist_Mono, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { site } from "@/config/site";
+import { getSiteUrl } from "@/lib/site-url";
 
 const serif = Cormorant_Garamond({
   subsets: ["latin", "latin-ext"],
@@ -31,11 +32,19 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: getSiteUrl(),
   title: {
     default: site.name,
     template: `%s · ${site.name}`,
   },
   description: site.description,
+  openGraph: {
+    type: "website",
+    locale: "it_IT",
+    siteName: site.name,
+    title: site.name,
+    description: site.description,
+  },
 };
 
 export const viewport: Viewport = {

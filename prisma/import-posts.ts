@@ -1,15 +1,14 @@
 /**
  * Importa articoli da content/posts/*.md nel database.
- * Copia le copertine locali in public/uploads/posts/.
+ * Copia le copertine locali su Blob in produzione o negli upload locali in sviluppo.
  * Esegui: npx tsx prisma/import-posts.ts
  */
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
-import { PrismaClient } from "@prisma/client";
 import { copyPublicAssetToUploads } from "../src/lib/uploads";
+import { prisma } from "../src/lib/prisma";
 
-const prisma = new PrismaClient();
 const postsDir = path.join(process.cwd(), "content/posts");
 
 function sanitizeCover(raw: unknown): string | undefined {

@@ -2,6 +2,9 @@
   "name": "labuvette",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=20.19.0"
+  },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
   },
@@ -11,6 +14,7 @@
     "start": "next start",
     "lint": "eslint",
     "hash-password": "node scripts/hash-password.mjs",
+    "db:seed": "tsx prisma/seed.ts",
     "db:import-posts": "tsx prisma/import-posts.ts",
     "optimize-uploads": "tsx scripts/optimize-uploads.ts",
     "postinstall": "prisma generate"
@@ -26,10 +30,10 @@
     "@tiptap/pm": "^3.23.4",
     "@tiptap/react": "^3.23.4",
     "@tiptap/starter-kit": "^3.23.4",
+    "@vercel/blob": "^2.4.1",
     "bcryptjs": "^3.0.3",
     "framer-motion": "^12.38.0",
     "gray-matter": "^4.0.3",
-    "isomorphic-dompurify": "^3.12.0",
     "jose": "^6.2.3",
     "marked": "^18.0.3",
     "next": "16.2.6",
@@ -37,6 +41,7 @@
     "react-dom": "19.2.4",
     "react-markdown": "^10.1.0",
     "remark-gfm": "^4.0.1",
+    "sanitize-html": "^2.17.5",
     "sharp": "^0.34.5"
   },
   "devDependencies": {
@@ -45,6 +50,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/sanitize-html": "^2.16.1",
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.2.6",

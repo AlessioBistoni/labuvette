@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useId, useRef, useState, type ChangeEvent } from "react";
+import { MAX_COVER_UPLOAD_BYTES } from "@/config/uploads";
 
 type Props = {
   name?: string;
@@ -16,14 +17,24 @@ export function CoverImagePicker({
   const inputRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
+  const [fileError, setFileError] = useState<string | null>(null);
 
   function onFileChange(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) {
       setPreview(null);
       setFileName(null);
+      setFileError(null);
       return;
     }
+    if (file.size > MAX_COVER_UPLOAD_BYTES) {
+      e.target.value = "";
+      setPreview(null);
+      setFileName(null);
+      setFileError("L'immagine non può superare 3 MB.");
+      return;
+    }
+    setFileError(null);
     setFileName(file.name);
     const url = URL.createObjectURL(file);
     setPreview((prev) => {
@@ -79,6 +90,13 @@ export function CoverImagePicker({
           </span>
         )}
       </div>
+      {fileError ? (
+        <p className="font-sans text-xs text-[var(--wine)]">{fileError}</p>
+      ) : (
+        <p className="font-sans text-xs text-[var(--ink-faint)]">
+          JPG, PNG, WebP o HEIC, massimo 3 MB.
+        </p>
+      )}
     </div>
   );
 }

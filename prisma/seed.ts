@@ -1,25 +1,28 @@
-import { PrismaClient } from "@prisma/client";
 import { execSync } from "child_process";
+import { prisma } from "../src/lib/prisma";
 
-const prisma = new PrismaClient();
-
-const ALESSIO_USERNAME = "alessio";
-const ALESSIO_NAME = "Alessio Bistoni";
-const ALESSIO_PASSWORD_HASH =
-  "$2b$12$l/amlTaXIROTqQwXFzoRxugX/APFACCBMmwlZgx42JiBpW1UxbvY6";
+function requiredEnv(name: string): string {
+  const value = process.env[name]?.trim();
+  if (!value) throw new Error(`${name} non configurata.`);
+  return value;
+}
 
 async function main() {
-  await prisma.$executeRaw`
-    UPDATE Admin SET username = 'alessio' WHERE username = 'alessio_bistoni'
-  `;
+  const adminUsername = requiredEnv("SEED_ADMIN_USERNAME");
+  const adminName = requiredEnv("SEED_ADMIN_NAME");
+  const adminPasswordHash = requiredEnv("SEED_ADMIN_PASSWORD_HASH");
 
   await prisma.admin.upsert({
-    where: { username: ALESSIO_USERNAME },
-    update: {},
+    where: { username: adminUsername },
+    update: {
+      name: adminName,
+      passwordHash: adminPasswordHash,
+      role: "OWNER",
+    },
     create: {
-      username: ALESSIO_USERNAME,
-      name: ALESSIO_NAME,
-      passwordHash: ALESSIO_PASSWORD_HASH,
+      username: adminUsername,
+      name: adminName,
+      passwordHash: adminPasswordHash,
       role: "OWNER",
     },
   });
