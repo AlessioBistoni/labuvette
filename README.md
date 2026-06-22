@@ -14,13 +14,9 @@ npm run db:seed
 npm run dev
 ```
 
-Genera l'hash della password amministratore con:
-
-```bash
-npm run hash-password -- "una-password-lunga-e-unica"
-```
-
-Inserisci il risultato in `SEED_ADMIN_PASSWORD_HASH` prima del seed.
+Imposta `SEED_ADMIN_USERNAME`, `SEED_ADMIN_NAME` e una
+`SEED_ADMIN_PASSWORD` di almeno 12 caratteri prima del seed. Lo script genera
+automaticamente un hash bcrypt e non salva la password in chiaro nel database.
 
 ## Variabili Vercel
 
@@ -46,7 +42,16 @@ non durante il normale funzionamento del sito.
 
 ## Database Turso
 
-Per trasferire un database esistente:
+Per caricare l'attuale database locale, che contiene già articoli e admin:
+
+```bash
+sqlite3 prisma/dev.db .dump > /tmp/labuvette.sql
+turso db create labuvette --from-dump /tmp/labuvette.sql
+turso db show labuvette --url
+turso db tokens create labuvette
+```
+
+Per trasferire invece un database Turso esistente:
 
 ```bash
 turso db shell DATABASE_ORIGINE .dump > labuvette.sql

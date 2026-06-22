@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@libsql/client": "^0.8.1",
+    "@next/env": "^16.2.9",
     "@prisma/adapter-libsql": "^5.22.0",
     "@prisma/client": "^5.22.0",
     "@tiptap/extension-color": "^3.23.4",

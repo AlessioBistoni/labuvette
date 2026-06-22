@@ -3,6 +3,7 @@
  * Copia le copertine locali su Blob in produzione o negli upload locali in sviluppo.
  * Esegui: npx tsx prisma/import-posts.ts
  */
+import "../src/lib/load-env";
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
