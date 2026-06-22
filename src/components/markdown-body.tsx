@@ -11,23 +11,26 @@ export function MarkdownBody({ content }: Props) {
       remarkPlugins={[remarkGfm]}
       components={{
         h1: (p) => (
-          <h1 className="mb-4 mt-10 text-left text-3xl" {...p} />
+          <h1
+            className="font-serif text-3xl font-medium tracking-tight text-[var(--ink)] mt-10 mb-4"
+            {...p}
+          />
         ),
         h2: (p) => (
           <h2
-            className="mb-3 mt-8 text-left text-2xl font-bold leading-snug text-[var(--ink)]"
+            className="font-serif text-2xl font-medium text-[var(--ink)] mt-8 mb-3"
             {...p}
           />
         ),
         h3: (p) => (
           <h3
-            className="mb-2 mt-6 text-left text-lg font-bold leading-snug text-[var(--ink-soft)]"
+            className="font-sans text-lg font-medium text-[var(--ink-soft)] mt-6 mb-2"
             {...p}
           />
         ),
         p: (p) => (
           <p
-            className="mb-4 text-lg leading-relaxed text-[var(--ink)]"
+            className="font-serif text-lg leading-relaxed text-[var(--ink)] mb-4"
             {...p}
           />
         ),
@@ -42,24 +45,24 @@ export function MarkdownBody({ content }: Props) {
         ),
         ul: (p) => (
           <ul
-            className="my-4 list-disc space-y-2 pl-6 text-lg text-[var(--ink)]"
+            className="my-4 list-disc pl-6 font-serif text-lg text-[var(--ink)] space-y-2"
             {...p}
           />
         ),
         ol: (p) => (
           <ol
-            className="my-4 list-decimal space-y-2 pl-6 text-lg text-[var(--ink)]"
+            className="my-4 list-decimal pl-6 font-serif text-lg text-[var(--ink)] space-y-2"
             {...p}
           />
         ),
         li: (p) => <li className="leading-relaxed pl-1" {...p} />,
         strong: (p) => (
-          <strong className="font-bold text-[var(--ink)]" {...p} />
+          <strong className="font-semibold text-[var(--ink)]" {...p} />
         ),
         em: (p) => <em className="italic text-[var(--ink-soft)]" {...p} />,
         blockquote: (p) => (
           <blockquote
-            className="my-6 border-l border-[var(--ink)]/25 pl-5 text-lg italic text-[var(--ink-soft)]"
+            className="border-l border-[var(--ink)]/25 pl-5 my-6 font-serif text-lg italic text-[var(--ink-soft)]"
             {...p}
           />
         ),
@@ -69,7 +72,7 @@ export function MarkdownBody({ content }: Props) {
           if (inline) {
             return (
               <code
-                className="rounded bg-[var(--cream-dark)] px-1.5 py-0.5 text-[0.9em] text-[var(--ink)]"
+                className="rounded bg-[var(--cream-dark)] px-1.5 py-0.5 font-mono text-[0.9em] text-[var(--ink)]"
                 {...rest}
               >
                 {children}
@@ -78,7 +81,7 @@ export function MarkdownBody({ content }: Props) {
           }
           return (
             <code
-              className={`block overflow-x-auto rounded-lg bg-[var(--cream-dark)] p-4 text-sm text-[var(--ink)] ${className ?? ""}`}
+              className={`block overflow-x-auto rounded-lg bg-[var(--cream-dark)] p-4 font-mono text-sm text-[var(--ink)] ${className ?? ""}`}
               {...rest}
             >
               {children}

@@ -33,7 +33,7 @@ export default async function RedazioneHome({ searchParams }: Props) {
         <p className="font-sans text-[11px] uppercase tracking-[0.28em] text-[var(--ink-muted)]">
           Amministratori
         </p>
-        <h1 className="font-split mt-3 text-4xl">
+        <h1 className="mt-3 font-serif text-4xl font-medium tracking-tight text-[var(--ink)]">
           Redazione
         </h1>
         <p className="mt-4 max-w-xl font-serif text-lg leading-relaxed text-[var(--ink-soft)]">

@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import type { Post } from "@/lib/post-types";
 import { formatDate } from "@/lib/format-date";
 import { resolvePostCardPreview, resolvePostCover } from "@/lib/post-display";
-import { postClass, splitSmClass } from "@/lib/typography";
+import { playfairStyle } from "@/lib/typography";
 
 const listMotion = {
   hidden: { opacity: 0 },
@@ -75,20 +75,19 @@ export function PostList({ posts, locale }: Props) {
                       </span>
                     ) : null}
                   </p>
-                  <h2 className="mt-1.5 font-serif text-base font-semibold leading-[1.12] tracking-tight text-white sm:mt-3 sm:text-2xl">
+                  <h2
+                    className="mt-1.5 text-balance text-base font-semibold leading-[1.12] tracking-tight text-white sm:mt-3 sm:text-2xl"
+                    style={playfairStyle}
+                  >
                     {post.title}
                   </h2>
                 </div>
               </div>
               <div className="border-b border-[var(--line)] pb-6 pt-4 sm:pb-10 sm:pt-6">
-                <p
-                  className={`${postClass} text-sm leading-relaxed text-[var(--ink-soft)] line-clamp-3 sm:text-base sm:line-clamp-4`}
-                >
+                <p className="font-serif text-sm leading-relaxed text-[var(--ink-soft)] line-clamp-3 sm:text-base sm:line-clamp-4">
                   {preview}
                 </p>
-                <span
-                  className={`${splitSmClass} mt-3 inline-block text-[9px] tracking-[0.24em] underline decoration-[var(--ink-faint)] underline-offset-[6px] transition-colors group-hover:decoration-[var(--ink)] sm:mt-5 sm:text-[10px] sm:tracking-[0.28em]`}
-                >
+                <span className="mt-3 inline-block font-sans text-[9px] uppercase tracking-[0.24em] text-[var(--ink-muted)] underline decoration-[var(--ink-faint)] underline-offset-[6px] transition-colors group-hover:decoration-[var(--ink)] sm:mt-5 sm:text-[10px] sm:tracking-[0.28em]">
                   Leggi
                 </span>
               </div>

@@ -4,5 +4,5 @@ export const site = {
   description:
     "Un angolo minimale per racconti, note e argomenti che ci interessano.",
   locale: "it-IT",
-  contactEmail: "mail@mail.it",
+  contactEmail: "info@labuvette.blog",
 } as const;

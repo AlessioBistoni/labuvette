@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { SECTION_NAV } from "@/config/sections";
-import { splitSmClass } from "@/lib/typography";
 
 const ICON_SIZE = 48;
 
@@ -21,7 +20,8 @@ const frameClass =
 const imageClass =
   "object-cover object-center grayscale contrast-[1.05] transition-[filter] duration-300 ease-out group-hover:grayscale-0 motion-reduce:transition-none";
 
-const labelClass = `block w-full text-center text-[8px] uppercase leading-none tracking-[0.2em] transition-transform duration-300 ease-out group-hover:translate-y-px sm:text-[9px] ${splitSmClass}`;
+const labelClass =
+  "block w-full text-center font-sans text-[8px] uppercase leading-none tracking-[0.2em] transition-transform duration-300 ease-out group-hover:translate-y-px sm:text-[9px]";
 
 export function SectionNav() {
   const searchParams = useSearchParams();

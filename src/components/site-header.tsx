@@ -2,11 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Suspense } from "react";
-import { SectionNav, SectionNavFallback } from "@/components/section-nav";
 import { site } from "@/config/site";
-import { isAdminPath } from "@/lib/routes";
 
 const LOGO = {
   mobile: { src: "/brand/labuvette-awing-mobile.png", width: 800, height: 130 },
@@ -14,11 +10,8 @@ const LOGO = {
 } as const;
 
 export function SiteHeader() {
-  const pathname = usePathname();
-  const showSections = !isAdminPath(pathname);
-
   return (
-    <header className="sticky top-0 z-20 border-b border-[var(--line)] bg-[var(--paper)]/95 backdrop-blur-sm supports-[backdrop-filter]:bg-[var(--paper)]/80">
+    <header className="sticky top-0 z-20 bg-[var(--paper)]/95 backdrop-blur-sm supports-[backdrop-filter]:bg-[var(--paper)]/80">
       <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-10 sm:py-8">
         <Link
           href="/"
@@ -47,12 +40,6 @@ export function SiteHeader() {
           </div>
           <span className="sr-only">{site.name}</span>
         </Link>
-
-        {showSections ? (
-          <Suspense fallback={<SectionNavFallback />}>
-            <SectionNav />
-          </Suspense>
-        ) : null}
       </div>
     </header>
   );

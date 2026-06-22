@@ -6,7 +6,7 @@ import { ArticleBody } from "@/components/article-body";
 import { site } from "@/config/site";
 import { formatDate } from "@/lib/format-date";
 import { resolvePostCardPreview, resolvePostCover } from "@/lib/post-display";
-import { postClass, splitSmClass } from "@/lib/typography";
+import { playfairStyle } from "@/lib/typography";
 import { getPostBySlug } from "@/lib/posts";
 
 export const dynamic = "force-dynamic";
@@ -36,12 +36,12 @@ export default async function PostPage({ params }: Props) {
       <div className="mx-auto w-full min-w-0 max-w-5xl px-5 pt-6 sm:px-10 sm:pt-10 lg:px-16 lg:pt-12">
         <Link
           href="/"
-          className={`inline-block text-[10px] uppercase tracking-[0.28em] transition-colors hover:opacity-80 ${splitSmClass}`}
+          className="inline-block font-sans text-[10px] uppercase tracking-[0.28em] text-[var(--ink-muted)] transition-colors hover:text-[var(--ink)]"
         >
           ← Blog
         </Link>
 
-        <header className="post-content mt-8 border-b border-[var(--line)] pb-8 sm:mt-10 sm:pb-10">
+        <header className="mt-8 border-b border-[var(--line)] pb-8 sm:mt-10 sm:pb-10">
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1 font-sans text-[10px] uppercase tracking-[0.32em] text-[var(--ink-muted)]">
             <time dateTime={post.date}>{formatDate(post.date, site.locale)}</time>
             {post.section ? (
@@ -62,7 +62,8 @@ export default async function PostPage({ params }: Props) {
             ) : null}
           </div>
           <h1
-            className={`${postClass} mt-5 max-w-4xl break-words text-left text-[2rem] font-medium leading-[1.08] tracking-tight sm:mt-6 sm:text-5xl lg:text-[3.25rem]`}
+            className="mt-5 max-w-4xl break-words text-left text-[2rem] font-semibold leading-[1.08] tracking-tight text-[var(--ink)] sm:mt-6 sm:text-5xl lg:text-[3.25rem]"
+            style={playfairStyle}
           >
             {post.title}
           </h1>
@@ -82,12 +83,10 @@ export default async function PostPage({ params }: Props) {
         </figure>
       </div>
 
-      <div className="post-content mx-auto w-full min-w-0 max-w-5xl px-5 pb-10 pt-2 sm:px-10 sm:pb-14 sm:pt-4 lg:px-16 lg:pb-16 lg:pt-6">
+      <div className="mx-auto w-full min-w-0 max-w-5xl px-5 pb-10 pt-2 sm:px-10 sm:pb-14 sm:pt-4 lg:px-16 lg:pb-16 lg:pt-6">
         <div className="w-full min-w-0 max-w-[42rem] text-left">
           {preview ? (
-            <p
-              className={`${postClass} break-words text-xl leading-[1.55] text-[var(--ink-soft)] sm:text-[1.35rem]`}
-            >
+            <p className="break-words font-serif text-xl leading-[1.55] text-[var(--ink-soft)] sm:text-[1.35rem]">
               {preview}
             </p>
           ) : null}
