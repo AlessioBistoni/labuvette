@@ -87,7 +87,12 @@ export function PostList({ posts, locale }: Props) {
                 <p className="font-serif text-sm leading-relaxed text-[var(--ink-soft)] line-clamp-3 sm:text-base sm:line-clamp-4">
                   {preview}
                 </p>
-                <span className="mt-3 inline-block font-sans text-[9px] uppercase tracking-[0.24em] text-[var(--ink-muted)] underline decoration-[var(--ink-faint)] underline-offset-[6px] transition-colors group-hover:decoration-[var(--ink)] sm:mt-5 sm:text-[10px] sm:tracking-[0.28em]">
+                {post.section ? (
+                  <span className="mt-3 inline-block font-sans text-[9px] uppercase tracking-[0.24em] text-[var(--ink-muted)] sm:hidden">
+                    {post.section}
+                  </span>
+                ) : null}
+                <span className="mt-5 hidden font-sans text-[10px] uppercase tracking-[0.28em] text-[var(--ink-muted)] underline decoration-[var(--ink-faint)] underline-offset-[6px] transition-colors group-hover:decoration-[var(--ink)] sm:inline-block">
                   Leggi
                 </span>
               </div>

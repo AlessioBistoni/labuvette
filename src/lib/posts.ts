@@ -79,7 +79,7 @@ export type PostInput = {
   author?: string;
   excerpt?: string;
   cover?: string;
-  section?: PostSection;
+  section?: PostSection | null;
   content: string;
 };
 

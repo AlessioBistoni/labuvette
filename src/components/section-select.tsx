@@ -1,15 +1,15 @@
-import { POST_SECTIONS } from "@/config/sections";
-
 type Props = {
+  categories: string[];
   name?: string;
   defaultValue?: string;
   required?: boolean;
 };
 
 export function SectionSelect({
+  categories,
   name = "section",
   defaultValue = "",
-  required = true,
+  required = false,
 }: Props) {
   return (
     <div>
@@ -26,8 +26,8 @@ export function SectionSelect({
         defaultValue={defaultValue}
         className="mt-2 w-full border border-[var(--line)] bg-[var(--paper)] px-4 py-3 font-sans text-sm text-[var(--ink)] outline-none focus:ring-2 focus:ring-[var(--wine)]/25"
       >
-        {!required ? <option value="">— Nessuna —</option> : null}
-        {POST_SECTIONS.map((s) => (
+        <option value="">Nessuna categoria</option>
+        {categories.map((s) => (
           <option key={s} value={s}>
             {s}
           </option>

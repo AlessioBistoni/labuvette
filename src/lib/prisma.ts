@@ -32,7 +32,7 @@ function createPrismaClient() {
 }
 
 function isClientUpToDate(client: PrismaClient | undefined): client is PrismaClient {
-  if (!client || !("post" in client)) return false;
+  if (!client || !("post" in client) || !("category" in client)) return false;
   return "section" in Prisma.PostScalarFieldEnum;
 }
 

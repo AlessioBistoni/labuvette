@@ -10,7 +10,7 @@ export async function SiteFooter() {
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-10 px-5 py-14 sm:grid-cols-2 sm:gap-12 sm:px-10">
           <div>
-            <p className="font-sans text-[11px] uppercase tracking-[0.28em] text-[var(--ink-muted)]">
+            <p className="font-sans text-[11px] uppercase tracking-[0.28em] text-[var(--orange)]">
               Contatti
             </p>
             <a
@@ -25,7 +25,7 @@ export async function SiteFooter() {
           </div>
 
           <div className="sm:text-right">
-            <p className="font-sans text-[11px] uppercase tracking-[0.28em] text-[var(--ink-muted)]">
+            <p className="font-sans text-[11px] uppercase tracking-[0.28em] text-[var(--orange)]">
               Redazione
             </p>
             <nav className="mt-3 flex flex-col gap-2 sm:items-end">

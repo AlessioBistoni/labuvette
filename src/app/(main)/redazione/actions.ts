@@ -4,6 +4,12 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/get-session";
 import {
+  createCategory,
+  deleteCategory,
+  normalizeCategoryName,
+  updateCategoryName,
+} from "@/lib/categories";
+import {
   createPost,
   deletePostBySlug,
   getPostBySlug,
@@ -66,13 +72,8 @@ async function resolveCoverFromForm(
   return existingCover ?? undefined;
 }
 
-function parseSectionFromForm(formData: FormData, errRedirect: string) {
-  const section = parsePostSection(String(formData.get("section") ?? ""));
-  if (!section) {
-    const sep = errRedirect.includes("?") ? "&" : "?";
-    redirect(`${errRedirect}${sep}err=section`);
-  }
-  return section;
+function parseSectionFromForm(formData: FormData) {
+  return parsePostSection(String(formData.get("section") ?? ""));
 }
 
 export async function createPostAction(formData: FormData) {
@@ -92,7 +93,7 @@ export async function createPostAction(formData: FormData) {
   const date = parseIsoDate(String(formData.get("date") ?? ""), "/redazione/nuovo");
   const author = String(formData.get("author") ?? "").trim();
   const excerpt = String(formData.get("excerpt") ?? "").trim();
-  const section = parseSectionFromForm(formData, "/redazione/nuovo");
+  const section = parseSectionFromForm(formData);
   const bodyRaw = String(formData.get("body") ?? "");
   const body = sanitizeArticleHtml(bodyRaw);
 
@@ -151,7 +152,7 @@ export async function updatePostAction(formData: FormData) {
   );
   const author = String(formData.get("author") ?? "").trim();
   const excerpt = String(formData.get("excerpt") ?? "").trim();
-  const section = parseSectionFromForm(formData, `/redazione/${slug}`);
+  const section = parseSectionFromForm(formData);
   const bodyRaw = String(formData.get("body") ?? "");
   const body = sanitizeArticleHtml(bodyRaw);
 
@@ -196,4 +197,55 @@ export async function deletePostAction(formData: FormData) {
   revalidatePath("/");
   revalidatePath("/sitemap.xml");
   redirect("/redazione?deleted=1");
+}
+
+export async function createCategoryAction(formData: FormData) {
+  await requireEditor();
+
+  const name = normalizeCategoryName(String(formData.get("name") ?? ""));
+  if (name.length < 1) redirect("/redazione?err=category-name");
+
+  try {
+    await createCategory({ name });
+  } catch {
+    redirect("/redazione?err=category-exists");
+  }
+
+  revalidatePath("/");
+  revalidatePath("/redazione");
+  redirect("/redazione?category=created");
+}
+
+export async function updateCategoryAction(formData: FormData) {
+  await requireEditor();
+
+  const id = String(formData.get("id") ?? "").trim();
+  const name = normalizeCategoryName(String(formData.get("name") ?? ""));
+  if (!id) redirect("/redazione?err=category-missing");
+  if (name.length < 1) redirect("/redazione?err=category-name");
+
+  try {
+    const updated = await updateCategoryName(id, name);
+    if (!updated) redirect("/redazione?err=category-missing");
+  } catch {
+    redirect("/redazione?err=category-exists");
+  }
+
+  revalidatePath("/");
+  revalidatePath("/redazione");
+  redirect("/redazione?category=updated");
+}
+
+export async function deleteCategoryAction(formData: FormData) {
+  await requireEditor();
+
+  const id = String(formData.get("id") ?? "").trim();
+  if (!id) redirect("/redazione?err=category-missing");
+
+  const removed = await deleteCategory(id);
+  if (!removed) redirect("/redazione?err=category-missing");
+
+  revalidatePath("/");
+  revalidatePath("/redazione");
+  redirect("/redazione?category=deleted");
 }

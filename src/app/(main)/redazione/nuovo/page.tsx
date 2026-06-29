@@ -2,6 +2,7 @@ import Link from "next/link";
 import { CoverImagePicker } from "@/components/cover-image-picker";
 import { RichTextEditor } from "@/components/rich-text-editor";
 import { SectionSelect } from "@/components/section-select";
+import { getCategories } from "@/lib/categories";
 import { createPostAction } from "../actions";
 
 function errMsg(code: string | undefined) {
@@ -18,8 +19,6 @@ function errMsg(code: string | undefined) {
       return "La data non è valida (usa il formato del calendario).";
     case "cover":
       return "Immagine di copertina non valida o formato non supportato.";
-    case "section":
-      return "Seleziona una sezione: Economia, Cultura o Cucina.";
     default:
       return null;
   }
@@ -33,6 +32,7 @@ export default async function NuovoArticoloPage({ searchParams }: Props) {
   const sp = await searchParams;
   const alert = errMsg(sp.err);
   const today = new Date().toISOString().slice(0, 10);
+  const categories = await getCategories();
 
   return (
     <main className="mx-auto max-w-2xl px-5 pb-24 pt-10 sm:px-8 sm:pt-14">
@@ -105,7 +105,7 @@ export default async function NuovoArticoloPage({ searchParams }: Props) {
           />
         </div>
         <div>
-          <SectionSelect defaultValue="Economia" />
+          <SectionSelect categories={categories.map((c) => c.name)} />
         </div>
         <div>
           <label

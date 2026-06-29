@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { CoverImagePicker } from "@/components/cover-image-picker";
 import { RichTextEditor } from "@/components/rich-text-editor";
 import { SectionSelect } from "@/components/section-select";
+import { getCategories } from "@/lib/categories";
 import { getPostBySlug } from "@/lib/posts";
 import { updatePostAction } from "../actions";
 import { DeletePostForm } from "../delete-post-form";
@@ -22,8 +23,6 @@ function errMsg(code: string | undefined) {
       return "La data non è valida.";
     case "cover":
       return "Immagine di copertina non valida o formato non supportato.";
-    case "section":
-      return "Seleziona una sezione: Economia, Cultura o Cucina.";
     default:
       return null;
   }
@@ -38,6 +37,7 @@ export default async function ModificaArticoloPage({ params, searchParams }: Pro
   const saved = sp.saved === "1";
   const alert = errMsg(sp.err);
   const dateStr = new Date(post.date).toISOString().slice(0, 10);
+  const categories = await getCategories();
 
   return (
     <main className="mx-auto max-w-2xl px-5 pb-24 pt-10 sm:px-8 sm:pt-14">
@@ -139,7 +139,10 @@ export default async function ModificaArticoloPage({ params, searchParams }: Pro
           />
         </div>
         <div>
-          <SectionSelect defaultValue={post.section ?? "Economia"} />
+          <SectionSelect
+            categories={categories.map((c) => c.name)}
+            defaultValue={post.section ?? ""}
+          />
         </div>
         <div>
           <span className="block font-sans text-[11px] uppercase tracking-[0.22em] text-[var(--ink-muted)]">
