@@ -72,7 +72,9 @@ export default async function GestionePage({ searchParams }: Props) {
           Gestione account
         </h1>
         <p className="mt-4 max-w-xl font-serif text-lg leading-relaxed text-[var(--ink-soft)]">
-          Cambia liberamente il nome con cui accedi e la password.
+          Cambia liberamente il nome con cui accedi e la password. Il campo{" "}
+          <strong className="font-semibold text-[var(--ink)]">Nome</strong> è
+          l’unico identificativo dell’account.
         </p>
       </header>
 
