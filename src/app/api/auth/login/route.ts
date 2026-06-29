@@ -30,19 +30,30 @@ export async function POST(request: Request) {
     return redirectToPath(request, "/login?error=1");
   }
 
-  const username = String(form.get("username") ?? "").trim().toLowerCase();
+  const name = String(form.get("name") ?? form.get("username") ?? "").trim();
   const password = String(form.get("password") ?? "");
   const fromRaw = form.get("from");
   const from =
     typeof fromRaw === "string" ? safeInternalPath(fromRaw) : "/";
 
-  if (!username || !password) {
+  if (!name || !password) {
     return redirectToPath(request, "/login?error=1");
   }
 
   let admin;
   try {
-    admin = await prisma.admin.findUnique({ where: { username } });
+    const normalizedName = name
+      .toLowerCase()
+      .replace(/\s+/g, "_")
+      .replace(/[^a-z0-9_-]/g, "")
+      .replace(/_+/g, "_")
+      .replace(/^[-_]|[-_]$/g, "");
+
+    admin = await prisma.admin.findFirst({
+      where: {
+        OR: [{ name }, { username: normalizedName }],
+      },
+    });
   } catch {
     return redirectToPath(request, "/login?error=config");
   }

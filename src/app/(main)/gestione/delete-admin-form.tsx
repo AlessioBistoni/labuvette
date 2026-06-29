@@ -4,10 +4,10 @@ import { deleteAdminAction } from "./actions";
 
 type Props = {
   adminId: string;
-  username: string;
+  name: string;
 };
 
-export function DeleteAdminForm({ adminId, username }: Props) {
+export function DeleteAdminForm({ adminId, name }: Props) {
   return (
     <form
       action={deleteAdminAction}
@@ -15,7 +15,7 @@ export function DeleteAdminForm({ adminId, username }: Props) {
       onSubmit={(e) => {
         if (
           !confirm(
-            `Eliminare definitivamente l’account @${username}? L’operazione non è annullabile.`,
+            `Eliminare definitivamente l’account ${name}? L’operazione non è annullabile.`,
           )
         ) {
           e.preventDefault();

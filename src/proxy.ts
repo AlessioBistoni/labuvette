@@ -9,10 +9,6 @@ function redirectToLogin(request: NextRequest, pathname: string) {
   return redirectToPath(request, `/login?${qs.toString()}`);
 }
 
-function redirectForbidden(request: NextRequest) {
-  return redirectToPath(request, "/?forbidden=1");
-}
-
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const token = request.cookies.get(SESSION_COOKIE)?.value;
@@ -25,7 +21,6 @@ export async function proxy(request: NextRequest) {
 
   if (isGestione) {
     if (!session) return redirectToLogin(request, pathname);
-    if (session.role !== "OWNER") return redirectForbidden(request);
     return NextResponse.next();
   }
 

@@ -39,7 +39,7 @@ export default async function LoginPage({ searchParams }: Props) {
         Accedi
       </h1>
       <p className="mt-4 font-serif text-lg leading-relaxed text-[var(--ink-soft)]">
-        Accedi con nome utente e password per aprire la redazione.
+        Accedi con nome e password per aprire la redazione.
       </p>
 
       {missingProdSecret ? (
@@ -71,7 +71,7 @@ export default async function LoginPage({ searchParams }: Props) {
           className="mt-6 rounded border border-[var(--line)] bg-[var(--paper)] px-4 py-3 font-sans text-sm text-[var(--ink-soft)]"
           role="status"
         >
-          Nome utente o password non corretti.
+          Nome o password non corretti.
         </p>
       ) : null}
 
@@ -83,14 +83,14 @@ export default async function LoginPage({ searchParams }: Props) {
         <input type="hidden" name="from" value={from} />
         <div>
           <label
-            htmlFor="username"
+            htmlFor="name"
             className="block font-sans text-[11px] uppercase tracking-[0.22em] text-[var(--ink-muted)]"
           >
-            Nome utente
+            Nome
           </label>
           <input
-            id="username"
-            name="username"
+            id="name"
+            name="name"
             type="text"
             autoComplete="username"
             required

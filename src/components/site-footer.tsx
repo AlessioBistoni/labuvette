@@ -35,12 +35,12 @@ export async function SiteFooter() {
               >
                 Area riservata
               </Link>
-              {session?.role === "OWNER" ? (
+              {session ? (
                 <Link
                   href="/gestione"
                   className="font-sans text-xs uppercase tracking-[0.22em] text-[var(--ink-muted)] hover:text-[var(--ink)] transition-colors duration-300"
                 >
-                  Gestione amministratori
+                  Gestione account
                 </Link>
               ) : null}
               {session ? (

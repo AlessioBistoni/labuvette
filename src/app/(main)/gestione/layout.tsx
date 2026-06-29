@@ -7,8 +7,8 @@ export default async function GestioneLayout({
   children: React.ReactNode;
 }>) {
   const session = await getSession();
-  if (!session || session.role !== "OWNER") {
-    redirect("/?forbidden=1");
+  if (!session) {
+    redirect("/login?from=/gestione");
   }
   return <>{children}</>;
 }
