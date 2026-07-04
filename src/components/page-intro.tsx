@@ -21,7 +21,13 @@ export function PageIntro({ activeSection = null }: Props) {
       <p className="mt-6 max-w-xl border-l border-[var(--ink)] pl-4 font-serif text-base leading-relaxed text-[var(--ink-soft)] sm:mt-8 sm:pl-5 sm:text-lg">
         {activeSection
           ? `Articoli nella sezione ${activeSection}.`
-          : "Non prendiamo prenotazioni: arriviamo quando abbiamo qualcosa da condividere. Un articolo ogni dieci giorni, più o meno."}
+          : (
+              <>
+                {site.intro[0]}
+                <br />
+                {site.intro[1]}
+              </>
+            )}
       </p>
     </section>
   );
