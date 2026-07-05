@@ -34,15 +34,15 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: getSiteUrl(),
   title: {
-    default: site.name,
-    template: `%s · ${site.name}`,
+    default: site.shareName,
+    template: `%s · ${site.shareName}`,
   },
   description: site.description,
   openGraph: {
     type: "website",
     locale: "it_IT",
-    siteName: site.name,
-    title: site.name,
+    siteName: site.shareName,
+    title: site.shareName,
     description: site.description,
   },
 };
